@@ -1,0 +1,40 @@
+// This is for testing one motor encoder and will tell u the net rotation and direction of rotation.
+
+//ENCODER_PIN_A D2  
+// ENCODER_PIN_B D3
+
+// AIN1 D6
+// AIN2 D7
+// PWMA D9
+
+// STBY 8
+
+#define EncoderPinA 2
+#define EncoderPinB 3
+#define ForwardPin 7
+#define BackwardPin 6
+#define EnablePin 9
+volatile long Encodervalue=0;
+void setup() {
+pinMode(ForwardPin,OUTPUT);
+pinMode(BackwardPin,OUTPUT);
+pinMode(EnablePin,OUTPUT);
+pinMode(EncoderPinA, INPUT);
+pinMode(EncoderPinB, INPUT);
+attachInterrupt(digitalPinToInterrupt(EncoderPinA), updateEncoder, RISING);
+Serial.begin(9600);
+}
+void loop() {
+digitalWrite(ForwardPin,HIGH);
+digitalWrite(BackwardPin,LOW);
+analogWrite(EnablePin,255);
+Serial.println(Encodervalue);
+delay(100);
+}
+void updateEncoder()
+{
+if (digitalRead(EncoderPinA)> digitalRead(EncoderPinB))
+Encodervalue++;
+else
+Encodervalue--;
+}
